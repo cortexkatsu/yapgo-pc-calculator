@@ -297,79 +297,85 @@
     </div>
 
     <script>
-        // Data Master Negara (Hanya menyimpan Nama, Mata Uang, dan Fee Transfer Otomatis)
+        // Data Master Negara & Tarif Fee Bank Otomatis
         const daftarNegara = {
-            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 9000 },
             'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 16000 },
             'JP': { nama: 'Jepang',        mataUang: 'JPY', feeTf: 12000 },
-            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 11000 }
+            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 11000 },
+            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 9000 }
         };
 
-        function gantiNegara(){
-            const code = document.getElementByld('selectNegara').value;
-            const container = document.getElementByld('detailContainer');
-            const hasilBox = document.getElementByld('hasilBox');
+        function gantiNegara() {
+            const code = document.getElementById('selectNegara').value;
+            const container = document.getElementById('detailContainer');
+            const hasilBox = document.getElementById('hasilBox');
+            
+            // Sembunyikan kotak hasil terlebih dahulu
+            hasilBox.style.display = 'none';
 
-            hasilBox.classList.remove('show');
-
-            if (!code || !daftarNegara[code]){
-                container.style.display = 'block';
+            if (!code || !daftarNegara[code]) {
+                container.style.display = 'none';
+                return;
             }
 
             const data = daftarNegara[code];
-
-            //Set label teks mata uang samping input
-            document.getElementByld('labelRate').innerText = RATE (${data.mataUang} ➔ IDR);
+            
+            // Perbarui teks label mata uang pada form input
+            document.getElementById('labelRate').innerText = `RATE (${data.mataUang} ➔ IDR)`;
             const badges = document.getElementsByClassName('valas-badge');
-            for(let b of badges){
+            for(let b of badges) {
                 b.innerText = data.mataUang;
             }
 
-            //Reset input form agar kosong & wajib diisi manual
-            document.getElementByld('inputRate').value=";
-            document.getElementByld('inputHargaPc').value=";
-            document.getElementByld('inputShiploc').value=";
-            document.getElementByld('inputBuyer').value=";
+            // Kosongkan form input agar wajib diisi manual oleh user/buyer
+            document.getElementById('inputRate').value = ''; 
+            document.getElementById('inputHargaPc').value = '';
+            document.getElementById('inputShiploc').value = '';
+            document.getElementById('inputBuyer').value = 1;
 
+            // Buka paksa menu detail harga agar meluncur muncul di layar
             container.style.display = 'block';
         }
 
-        function prosesHitung(){
-            const code = document.getElementByls('selectNegara').value;
+        function prosesHitung() {
+            const code = document.getElementById('selectNegara').value;
             if(!code || !daftarNegara[code]) return;
-            
-            const data = daftarNegara[code];
 
-            //Mengambil nilai rate yang diketik manual
-            const rate = Number(document.getElementByld('inputRate').value) || 0;
-            let pc = Number(document.getElementByld('inputHargaPc').value) || 0;
-            let shiploc = Number(document.getElementByld('inputShiploc').value) || 0;
-            let buyer = Number(document.getElementByld('inputBuyer').value) || 1;
-            if(buyer<1) buyer = 1;
+            const data = daftarNegara[code];
+            
+            // Ambil angka dari ketikan manual user
+            const rate = Number(document.getElementById('inputRate').value) || 0;
+            let pc = Number(document.getElementById('inputHargaPc').value) || 0;
+            let shiploc = Number(document.getElementById('inputShiploc').value) || 0;
+            let buyer = Number(document.getElementById('inputBuyer').value) || 1;
+            if(buyer < 1) buyer = 1;
 
             const feeGo = 5000;
-            const feeTfBank = data.feeTf; //Otomatis terhiutng sesuai database tiap negara
-        
-           //Aturan khusus Korea dikasi 10k dulu
-            if (code==='KR'){
-            pc = pc*10000;
-            shiploc = shiploc*10000;    
+            const feeTfBank = data.feeTf;
+
+            // Proteksi Aturan Khusus Korea Selatan (KRW dikali 10.000 dahulu)
+            if (code === 'KR') {
+                pc = pc * 10000;
+                shiploc = shiploc * 10000;
+            }
+
+            // Eksekusi Rumus Utama Anda
+            const sisiKiri = (pc * rate) + feeGo;
+            const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
+            const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
+
+            // Cetak Hasil dan Buka Kotak Perhitungan di Paling Bawah
+            document.getElementById('hasilLabelNegara').innerText = `HARGA BERSIH • ${data.nama.toUpperCase()}`;
+            document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+            document.getElementById('hasilBox').style.display = 'block';
         }
 
-        //Rumus: ((harga x rate) + fee go 5k) + (((shiploc x rate) + fee tf) : jumlah buyer)
-        const sisiKiri = (pc * rate) + feeGo;
-        const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
-        const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
-
-        // Tampilkan Hasil Ke Layar Terbawah
-        document.getElementById('hasilLabelNegara').innerText = HARGA BERSIH •
-        ${data.nama.toUpperCase()};
-        document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
-        document.getElementById('hasilBox').style.display = 'block';
-        }
-
-        function resetForm(){
+        function resetForm() {
             document.getElementById('selectNegara').value = '';
             document.getElementById('detailContainer').style.display = 'none';
             document.getElementById('hasilBox').style.display = 'none';
         }
+     </script>
+</body>
+</html>
+        
