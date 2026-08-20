@@ -215,12 +215,12 @@
     <div class="container">
         <!-- HEADER UTAMA -->
         <header>
-            <h1>KALKULATOR<br><span>IMPOR.</span></h1>
+            <h1>KALKULATOR<br><span>IMPOR</span></h1>
             <div class="brand-container">
                 <span class="by">by</span>
                 <span class="brand-badge">YapGO!</span>
             </div>
-            <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.</p>
+            <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya</p>
         </header>
 
         <!-- FORM UTAMA -->
@@ -235,12 +235,12 @@
                 <div class="form-group">
                     <select id="selectNegara" onchange="gantiNegara()">
                         <option value="">— Pilih negara —</option>
-                        <option value="KR">Korea Selatan</option>
+                        <option value="PH">Filipina</option>
+                        <option value="KR">Korea</option>
                         <option value="JP">Jepang</option>
                         <option value="TH">Thailand</option>
-                        <option value="PH">Filipina</option>
-                        <option value="US" disabled>Amerika Serikat (segera)</option>
-                        <option value="CN" disabled>China (segera)</option>
+                        <option value="CN" disabled>China (soon)</option>
+                        <option value="US" disabled>US (soon)</option>
                     </select>
                 </div>
 
@@ -280,7 +280,7 @@
                         <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">JUMLAH BUYER</div>
                         <div class="input-wrapper">
                             <input type="number" id="inputBuyer" min="1" value="1" style="background-color: #FCF8F2;">
-                            <span class="input-badge">PAX</span>
+                            <span class="input-badge">ORANG</span>
                         </div>
                     </div>
 
@@ -299,10 +299,10 @@
     <script>
         // Data Master Negara (Hanya menyimpan Nama, Mata Uang, dan Fee Transfer Otomatis)
         const daftarNegara = {
-            'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 11000 },
+            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 9000 },
+            'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 16000 },
             'JP': { nama: 'Jepang',        mataUang: 'JPY', feeTf: 12000 },
-            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 10000 },
-            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 8000 }
+            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 11000 }
         };
 
         function gantiNegara(){
@@ -331,7 +331,7 @@
             document.getElementByld('inputShiploc').value=";
             document.getElementByld('inputBuyer').value=";
 
-            container.classList.add('show');
+            container.style.display = 'block';
         }
 
         function prosesHitung(){
@@ -365,11 +365,11 @@
         document.getElementById('hasilLabelNegara').innerText = HARGA BERSIH •
         ${data.nama.toUpperCase()};
         document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
-        document.getElementById('hasilBox').classList.add('show');
+        document.getElementById('hasilBox').style.display = 'block';
         }
 
         function resetForm(){
         document.getElementById('selectNegara').value = '';
         document.getElementById('detailContainer').classList.remove('show');
-        document.getElementById('hasilBox').classList.remove('show');
+        document.getElementById('hasilBox').style.display = 'block';
         }
