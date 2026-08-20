@@ -313,7 +313,7 @@
             hasilBox.classList.remove('show');
 
             if (!code || !daftarNegara[code]){
-                container.classList.remove('show');
+                container.style.display = 'block';
             }
 
             const data = daftarNegara[code];
@@ -335,25 +335,25 @@
         }
 
         function prosesHitung(){
-        const code = document.getElementByls('selectNegara').value;
-        if(!code || !daftarNegara[code]) return;
+            const code = document.getElementByls('selectNegara').value;
+            if(!code || !daftarNegara[code]) return;
+            
+            const data = daftarNegara[code];
 
-        const data = daftarNegara[code];
+            //Mengambil nilai rate yang diketik manual
+            const rate = Number(document.getElementByld('inputRate').value) || 0;
+            let pc = Number(document.getElementByld('inputHargaPc').value) || 0;
+            let shiploc = Number(document.getElementByld('inputShiploc').value) || 0;
+            let buyer = Number(document.getElementByld('inputBuyer').value) || 1;
+            if(buyer<1) buyer = 1;
 
-        //Mengambil nilai rate yang diketik manual
-        const rate = Number(document.getElementByld('inputRate').value) || 0;
-        let pc = Number(document.getElementByld('inputHargaPc').value) || 0;
-        let shiploc = Number(document.getElementByld('inputShiploc').value) || 0;
-        let buyer = Number(document.getElementByld('inputBuyer').value) || 1;
-        if(buyer<1) buyer = 1;
-
-        const feeGo = 5000;
-        const feeTfBank = data.feeTf; //Otomatis terhiutng sesuai database tiap negara
+            const feeGo = 5000;
+            const feeTfBank = data.feeTf; //Otomatis terhiutng sesuai database tiap negara
         
-       //Aturan khusus Korea dikasi 10k dulu
-        if (code==='KR'){
-        pc = pc*10000;
-        shiploc = shiploc*10000;    
+           //Aturan khusus Korea dikasi 10k dulu
+            if (code==='KR'){
+            pc = pc*10000;
+            shiploc = shiploc*10000;    
         }
 
         //Rumus: ((harga x rate) + fee go 5k) + (((shiploc x rate) + fee tf) : jumlah buyer)
@@ -369,7 +369,7 @@
         }
 
         function resetForm(){
-        document.getElementById('selectNegara').value = '';
-        document.getElementById('detailContainer').classList.remove('show');
-        document.getElementById('hasilBox').style.display = 'block';
+            document.getElementById('selectNegara').value = '';
+            document.getElementById('detailContainer').style.display = 'none';
+            document.getElementById('hasilBox').style.display = 'none';
         }
