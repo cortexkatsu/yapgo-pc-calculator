@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Impor PC K-Pop</title>
     <style>
-        /* BASE STYLE */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,8 +24,6 @@
             width: 100%;
             max-width: 440px;
         }
-
-        /* HEADER */
         header {
             margin-bottom: 24px;
         }
@@ -81,8 +78,6 @@
             line-height: 1.5;
             max-width: 340px;
         }
-
-        /* CARD FORM UTAMA */
         .brutal-card {
             background-color: white;
             border: 2px solid #000000;
@@ -119,8 +114,6 @@
         .btn-reset:hover {
             color: black;
         }
-
-        /* INPUTS & SELECTS */
         select, input {
             width: 100%;
             background-color: white;
@@ -150,18 +143,11 @@
             padding: 3px 6px;
             border-radius: 4px;
         }
-
-        /* HIDDEN DETAIL CONTAINER */
         .detail-container {
             display: none;
-            padding-top: 16px;
+            padding-top: 20px;
             border-top: 2px dashed #E5E7EB;
         }
-        .detail-container.show {
-            display: block;
-        }
-
-        /* TOMBOL HITUNG */
         .btn-hitung {
             width: 100%;
             background-color: #E11D48;
@@ -181,17 +167,12 @@
             transform: translate(2px, 2px);
             box-shadow: 0px 0px 0px 0px #000000;
         }
-
-        /* KOTAK HASIL */
         .hasil-box {
             display: none;
             background-color: #581C87;
             border-top: 2px solid #000000;
             padding: 24px;
             color: white;
-        }
-        .hasil-box.show {
-            display: block;
         }
         .hasil-label {
             font-size: 9px;
@@ -211,44 +192,34 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- HEADER UTAMA -->
         <header>
-            <h1>KALKULATOR<br><span>IMPOR</span></h1>
+            <h1>KALKULATOR<br><span>IMPOR.</span></h1>
             <div class="brand-container">
                 <span class="by">by</span>
                 <span class="brand-badge">YapGO!</span>
             </div>
-            <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya</p>
+            <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.</p>
         </header>
-
-        <!-- FORM UTAMA -->
         <div class="brutal-card">
             <div class="card-body">
                 <div class="flex-row-header">
                     <span class="label-upper">PILIH NEGARA</span>
                     <button onclick="resetForm()" class="btn-reset">🔄 RESET</button>
                 </div>
-
-                <!-- Dropdown Select -->
                 <div class="form-group">
                     <select id="selectNegara" onchange="gantiNegara()">
                         <option value="">— Pilih negara —</option>
-                        <option value="PH">Filipina</option>
-                        <option value="KR">Korea</option>
+                        <option value="KR">Korea Selatan</option>
                         <option value="JP">Jepang</option>
                         <option value="TH">Thailand</option>
-                        <option value="CN" disabled>China (soon)</option>
-                        <option value="US" disabled>US (soon)</option>
+                        <option value="PH">Filipina</option>
+                        <option value="US" disabled>Amerika Serikat (segera)</option>
+                        <option value="CN" disabled>China (segera)</option>
                     </select>
                 </div>
-
-                <!-- MENU DETAIL HARGA -->
                 <div id="detailContainer" class="detail-container">
                     <div class="label-upper" style="margin-bottom: 16px;">DETAIL HARGA</div>
-
-                    <!-- RATE (DIISI MANUAL) -->
                     <div class="form-group">
                         <div class="label-upper" id="labelRate" style="font-size: 9px; margin-bottom: 4px;">RATE</div>
                         <div class="input-wrapper">
@@ -256,8 +227,6 @@
                             <span class="input-badge">IDR</span>
                         </div>
                     </div>
-
-                    <!-- HARGA PC -->
                     <div class="form-group">
                         <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">HARGA PC</div>
                         <div class="input-wrapper">
@@ -265,8 +234,6 @@
                             <span class="input-badge valas-badge">VALAS</span>
                         </div>
                     </div>
-
-                    <!-- SHIPLOC -->
                     <div class="form-group">
                         <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">SHIPLOC</div>
                         <div class="input-wrapper">
@@ -274,21 +241,16 @@
                             <span class="input-badge valas-badge">VALAS</span>
                         </div>
                     </div>
-
-                    <!-- JUMLAH BUYER -->
                     <div class="form-group">
                         <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">JUMLAH BUYER</div>
                         <div class="input-wrapper">
                             <input type="number" id="inputBuyer" min="1" value="1" style="background-color: #FCF8F2;">
-                            <span class="input-badge">ORANG</span>
+                            <span class="input-badge">PAX</span>
                         </div>
                     </div>
-
                     <button onclick="prosesHitung()" class="btn-hitung">📋 HITUNG HARGA BERSIH</button>
                 </div>
             </div>
-
-            <!-- KOTAK HASIL PERHITUNGAN -->
             <div id="hasilBox" class="hasil-box">
                 <div class="hasil-label" id="hasilLabelNegara">HARGA BERSIH</div>
                 <div class="hasil-nilai" id="textHasil">Rp 0</div>
@@ -296,8 +258,7 @@
         </div>
     </div>
 
-    <script>
-        // Data Master Negara & Tarif Fee Bank Otomatis
+        <script>
         const daftarNegara = {
             'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 16000 },
             'JP': { nama: 'Jepang',        mataUang: 'JPY', feeTf: 12000 },
@@ -310,9 +271,8 @@
             const container = document.getElementById('detailContainer');
             const hasilBox = document.getElementById('hasilBox');
             
-            // Sembunyikan kotak hasil terlebih dahulu
             hasilBox.style.display = 'none';
-
+            
             if (!code || !daftarNegara[code]) {
                 container.style.display = 'none';
                 return;
@@ -320,20 +280,17 @@
 
             const data = daftarNegara[code];
             
-            // Perbarui teks label mata uang pada form input
-            document.getElementById('labelRate').innerText = `RATE (${data.mataUang} ➔ IDR)`;
+            document.getElementById('labelRate').innerText = 'RATE (' + data.mataUang + ' ➔ IDR)';
             const badges = document.getElementsByClassName('valas-badge');
             for(let b of badges) {
                 b.innerText = data.mataUang;
             }
 
-            // Kosongkan form input agar wajib diisi manual oleh user/buyer
             document.getElementById('inputRate').value = ''; 
             document.getElementById('inputHargaPc').value = '';
             document.getElementById('inputShiploc').value = '';
             document.getElementById('inputBuyer').value = 1;
 
-            // Buka paksa menu detail harga agar meluncur muncul di layar
             container.style.display = 'block';
         }
 
@@ -343,7 +300,6 @@
 
             const data = daftarNegara[code];
             
-            // Ambil angka dari ketikan manual user
             const rate = Number(document.getElementById('inputRate').value) || 0;
             let pc = Number(document.getElementById('inputHargaPc').value) || 0;
             let shiploc = Number(document.getElementById('inputShiploc').value) || 0;
@@ -353,20 +309,18 @@
             const feeGo = 5000;
             const feeTfBank = data.feeTf;
 
-            // Proteksi Aturan Khusus Korea Selatan (KRW dikali 10.000 dahulu)
             if (code === 'KR') {
                 pc = pc * 10000;
                 shiploc = shiploc * 10000;
             }
 
-            // Eksekusi Rumus Utama Anda
             const sisiKiri = (pc * rate) + feeGo;
             const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
             const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
 
-            // Cetak Hasil dan Buka Kotak Perhitungan di Paling Bawah
-            document.getElementById('hasilLabelNegara').innerText = `HARGA BERSIH • ${data.nama.toUpperCase()}`;
+            document.getElementById('hasilLabelNegara').innerText = 'HARGA BERSIH • ' + data.nama.toUpperCase();
             document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+            document.getElementById('hasilBox').style.style.display = 'none'; // Proteksi refresh
             document.getElementById('hasilBox').style.display = 'block';
         }
 
@@ -375,7 +329,6 @@
             document.getElementById('detailContainer').style.display = 'none';
             document.getElementById('hasilBox').style.display = 'none';
         }
-     </script>
+    </script>
 </body>
 </html>
-        
