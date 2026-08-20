@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Impor PC K-Pop</title>
+    <title>Kalkulator PC YapGO!</title>
+    <!-- Memuat Font Google Resmi Sesuai Gambar -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* BASE & FONT ADJUSTMENT */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
             background-color: #F4EFEA;
             color: #1E1E1E;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -24,10 +30,13 @@
             width: 100%;
             max-width: 440px;
         }
+
+        /* HEADER BRANDING */
         header {
             margin-bottom: 24px;
         }
         h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 36px;
             font-weight: 800;
             line-height: 0.95;
@@ -78,6 +87,8 @@
             line-height: 1.5;
             max-width: 340px;
         }
+
+        /* NEO-BRUTALISM CARD CONTEXT */
         .brutal-card {
             background-color: white;
             border: 2px solid #000000;
@@ -114,19 +125,23 @@
         .btn-reset:hover {
             color: black;
         }
+
+        /* FORM INPUT (Sizing Persis Gambar Anda) */
         select, input {
             width: 100%;
             background-color: white;
             border: 2px solid #000000;
             border-radius: 12px;
             padding: 14px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700; /* Font angka tebal sesuai gambar */
             outline: none;
         }
         select {
             background-color: #FCF8F2;
             cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
         }
         .input-wrapper {
             position: relative;
@@ -148,10 +163,13 @@
             padding-top: 20px;
             border-top: 2px dashed #E5E7EB;
         }
+
+        /* SUBMIT BUTTON */
         .btn-hitung {
             width: 100%;
             background-color: #E11D48;
             color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 14px;
             font-weight: 800;
             padding: 16px;
@@ -167,6 +185,8 @@
             transform: translate(2px, 2px);
             box-shadow: 0px 0px 0px 0px #000000;
         }
+
+        /* PURPLE BILLING SUM (Sizing Hasil Sesuai Gambar) */
         .hasil-box {
             display: none;
             background-color: #581C87;
@@ -185,7 +205,8 @@
             margin-bottom: 8px;
         }
         .hasil-nilai {
-            font-size: 36px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 42px; /* Diperbesar persis seperti gambar Anda */
             font-weight: 900;
             letter-spacing: -0.02em;
         }
@@ -194,30 +215,32 @@
 <body>
     <div class="container">
         <header>
-            <h1>KALKULATOR<br><span>IMPOR.</span></h1>
+            <h1>KALKULATOR<br><span>PC</span></h1>
             <div class="brand-container">
                 <span class="by">by</span>
                 <span class="brand-badge">YapGO!</span>
             </div>
             <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.</p>
         </header>
+
         <div class="brutal-card">
             <div class="card-body">
                 <div class="flex-row-header">
-                    <span class="label-upper">PILIH NEGARA</span>
-                    <button onclick="resetForm()" class="btn-reset">🔄 RESET</button>
+                    <span class="label-upper">-PILIH NEGARA-</span>
+                    <button onclick="resetForm()" class="btn-reset">⟲ RESET</button>
                 </div>
                 <div class="form-group">
                     <select id="selectNegara" onchange="gantiNegara()">
                         <option value="">— Pilih negara —</option>
-                        <option value="KR">Korea Selatan</option>
-                        <option value="JP">Jepang</option>
-                        <option value="TH">Thailand</option>
+                        <option value="CN">China</option>
                         <option value="PH">Filipina</option>
-                        <option value="US" disabled>Amerika Serikat (segera)</option>
-                        <option value="CN" disabled>China (segera)</option>
+                        <option value="JP">Jepang</option>
+                        <option value="KR">Korea</option>
+                        <option value="TH">Thailand</option>
+                        <option value="US" disabled>US (soon)</option>
                     </select>
                 </div>
+
                 <div id="detailContainer" class="detail-container">
                     <div class="label-upper" style="margin-bottom: 16px;">DETAIL HARGA</div>
                     <div class="form-group">
@@ -248,7 +271,7 @@
                             <span class="input-badge">PAX</span>
                         </div>
                     </div>
-                    <button onclick="prosesHitung()" class="btn-hitung">📋 HITUNG HARGA BERSIH</button>
+                    <button onclick="prosesHitung()" class="btn-hitung">🖥 HITUNG</button>
                 </div>
             </div>
             <div id="hasilBox" class="hasil-box">
@@ -260,10 +283,11 @@
 
         <script>
         const daftarNegara = {
-            'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 16000 },
-            'JP': { nama: 'Jepang',        mataUang: 'JPY', feeTf: 12000 },
-            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 11000 },
-            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 9000 }
+            'CH': { nama: 'China', mataUang: 'RMB', feeTf: 16000 },
+            'PH': { nama: 'Filipina', mataUang: 'PHP', feeTf: 10000 },
+            'JP': { nama: 'Jepang', mataUang: 'JPY', feeTf: 12000 },
+            'KR': { nama: 'Korea', mataUang: 'KRW', feeTf: 16000 },
+            'TH': { nama: 'Thailand', mataUang: 'THB', feeTf: 11000 }
         };
 
         function gantiNegara() {
@@ -300,6 +324,7 @@
 
             const data = daftarNegara[code];
             
+            // Pengambilan data input (Memperbaiki typo getElementIds)
             const rate = Number(document.getElementById('inputRate').value) || 0;
             let pc = Number(document.getElementById('inputHargaPc').value) || 0;
             let shiploc = Number(document.getElementById('inputShiploc').value) || 0;
@@ -314,13 +339,15 @@
                 shiploc = shiploc * 10000;
             }
 
+            // Rumus Akurat Sesuai Instruksi Anda
             const sisiKiri = (pc * rate) + feeGo;
             const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
             const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
 
-            document.getElementById('hasilLabelNegara').innerText = 'HARGA BERSIH • ' + data.nama.toUpperCase();
+            document.getElementById('hasilLabelNegara').innerText = 'HARGA BERSIH ' + data.nama.toUpperCase();
             document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
-            document.getElementById('hasilBox').style.style.display = 'none'; // Proteksi refresh
+            
+            // Menampilkan kotak hasil secara instan ke layar bawah tanpa macet
             document.getElementById('hasilBox').style.display = 'block';
         }
 
