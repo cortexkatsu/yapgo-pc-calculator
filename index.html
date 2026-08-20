@@ -4,164 +4,372 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Impor PC K-Pop</title>
-    <!-- Tailwind CSS & Alpine.js -->
-    <script src="https://tailwindcss.com"></script>
-    <script src="https://jsdelivr.net" defer></script>
-    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Efek bayangan Neo-Brutalism kaku */
-        .brutal-shadow { box-shadow: 5px 5px 0px 0px #000000; }
-        .brutal-shadow-sm { box-shadow: 2px 2px 0px 0px #000000; }
-        /* Menghilangkan panah input default number */
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-            -webkit-appearance: none; margin: 0;
+        /* BASE STYLE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #F4EFEA;
+            color: #1E1E1E;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 16px;
+        }
+        .container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        /* HEADER */
+        header {
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+        }
+        h1 span {
+            position: relative;
+            z-index: 1;
+        }
+        h1 span::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 2px;
+            width: 100%;
+            height: 12px;
+            background-color: #A5F3FC;
+            z-index: -1;
+            border-radius: 2px;
+        }
+        .brand-container {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .brand-container .by {
+            color: #6B7280;
+            font-weight: 400;
+        }
+        .brand-badge {
+            background-color: #E11D48;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1.5px solid black;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 1px 1px 0px black;
+        }
+        header p {
+            font-size: 12px;
+            color: #6B7280;
+            margin-top: 16px;
+            line-height: 1.5;
+            max-width: 340px;
+        }
+
+        /* CARD FORM UTAMA */
+        .brutal-card {
+            background-color: white;
+            border: 2px solid #000000;
+            border-radius: 24px;
+            box-shadow: 5px 5px 0px 0px #000000;
+            overflow: hidden;
+        }
+        .card-body {
+            padding: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .flex-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .label-upper {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #6B7280;
+        }
+        .btn-reset {
+            background: none;
+            border: none;
+            font-size: 10px;
+            font-weight: 700;
+            color: #4B5563;
+            cursor: pointer;
+        }
+        .btn-reset:hover {
+            color: black;
+        }
+
+        /* INPUTS & SELECTS */
+        select, input {
+            width: 100%;
+            background-color: white;
+            border: 2px solid #000000;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+        }
+        select {
+            background-color: #FCF8F2;
+            cursor: pointer;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-badge {
+            position: absolute;
+            right: 12px;
+            background-color: #000000;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        /* HIDDEN DETAIL CONTAINER */
+        .detail-container {
+            display: none;
+            padding-top: 16px;
+            border-top: 2px dashed #E5E7EB;
+        }
+        .detail-container.show {
+            display: block;
+        }
+
+        /* TOMBOL HITUNG */
+        .btn-hitung {
+            width: 100%;
+            background-color: #E11D48;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 16px;
+            border-radius: 16px;
+            border: 2px solid #000000;
+            box-shadow: 2px 2px 0px 0px #000000;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 16px;
+        }
+        .btn-hitung:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px #000000;
+        }
+
+        /* KOTAK HASIL */
+        .hasil-box {
+            display: none;
+            background-color: #581C87;
+            border-top: 2px solid #000000;
+            padding: 24px;
+            color: white;
+        }
+        .hasil-box.show {
+            display: block;
+        }
+        .hasil-label {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: #E9D5FF;
+            text-transform: uppercase;
+            border-top: 1px dashed rgba(233, 213, 255, 0.3);
+            padding-top: 4px;
+            margin-bottom: 8px;
+        }
+        .hasil-nilai {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
         }
     </style>
 </head>
-<body class="bg-[#F4EFEA] text-[#1E1E1E] min-h-screen flex flex-col items-center justify-start pt-10 px-4 pb-20">
+<body>
 
-    <div x-data="kalkulatorImpor()" class="w-full max-w-[460px]">
-        
+    <div class="container">
         <!-- HEADER UTAMA -->
-        <header class="mb-6">
-            <h1 class="font-heading text-4xl font-extrabold tracking-tight leading-none uppercase">
-                KALKULATOR<br>
-                <span class="relative inline-block mt-1">
-                    IMPOR.
-                    <span class="absolute left-0 bottom-1 w-full h-[14px] bg-[#A5F3FC] -z-10 rounded-sm"></span>
-                </span>
-            </h1>
-            
-            <div class="mt-4 flex items-center gap-1.5 text-sm font-semibold">
-                <span class="text-gray-500 font-normal">by</span>
-                <span class="bg-[#E11D48] text-white px-2 py-0.5 rounded-md border border-black text-xs font-bold tracking-wide shadow-[1px_1px_0px_0px_#000]">YapGO!</span>
+        <header>
+            <h1>KALKULATOR<br><span>IMPOR.</span></h1>
+            <div class="brand-container">
+                <span class="by">by</span>
+                <span class="brand-badge">YapGO!</span>
             </div>
-            
-            <p class="text-xs text-gray-500 mt-4 leading-relaxed max-w-[340px]">
-                Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.
-            </p>
+            <p>Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.</p>
         </header>
 
         <!-- FORM UTAMA -->
-        <div class="bg-white border-2 border-black rounded-[24px] brutal-shadow overflow-hidden transition-all duration-300">
-            
-            <div class="p-6 space-y-5">
-                <!-- BARIS PILIH NEGARA & RESET -->
-                <div class="flex justify-between items-center">
-                    <label class="block text-[10px] font-extrabold tracking-wider uppercase text-gray-500">PILIH NEGARA</label>
-                    <button @click="resetForm()" class="text-[10px] font-bold tracking-wider uppercase text-gray-600 hover:text-black flex items-center gap-1 focus:outline-none">
-                        🔄 RESET
-                    </button>
+        <div class="brutal-card">
+            <div class="card-body">
+                <div class="flex-row-header">
+                    <span class="label-upper">PILIH NEGARA</span>
+                    <button onclick="resetForm()" class="btn-reset">🔄 RESET</button>
                 </div>
 
                 <!-- Dropdown Select -->
-                <div class="relative">
-                    <select x-model="negaraTerpilih" @change="gantiNegara()"
-                        class="w-full bg-[#FCF8F2] border-2 border-black rounded-xl p-3.5 pr-10 font-medium text-sm appearance-none focus:outline-none focus:ring-0 cursor-pointer">
+                <div class="form-group">
+                    <select id="selectNegara" onchange="gantiNegara()">
                         <option value="">— Pilih negara —</option>
-                        <template x-for="n in daftarNegara">
-                            <option :value="n.id" :disabled="n.segera" x-text="n.nama + (n.segera ? ' (segera)' : '')"></option>
-                        </template>
+                        <option value="KR">Korea Selatan</option>
+                        <option value="JP">Jepang</option>
+                        <option value="TH">Thailand</option>
+                        <option value="PH">Filipina</option>
+                        <option value="US" disabled>Amerika Serikat (segera)</option>
+                        <option value="CN" disabled>China (segera)</option>
                     </select>
-                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
-                    </div>
                 </div>
 
                 <!-- MENU DETAIL HARGA -->
-                <div x-show="negaraTerpilih" x-collapse x-transition:enter.duration.400ms class="space-y-4 pt-2 border-t-2 border-dashed border-gray-300">
-                    
-                    <span class="block text-[10px] font-extrabold tracking-wider uppercase text-gray-400">DETAIL HARGA</span>
+                <div id="detailContainer" class="detail-container">
+                    <div class="label-upper" style="margin-bottom: 16px;">DETAIL HARGA</div>
 
-                    <!-- INPUT RATE -->
-                    <div class="space-y-1">
-                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500" x-text="'RATE (' + mataUang + ' ➔ IDR)'"></label>
-                        <div class="relative flex items-center">
-                            <input type="number" x-model.number="inputRate" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none">
-                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded">IDR</span>
+                    <!-- RATE (DIISI MANUAL) -->
+                    <div class="form-group">
+                        <div class="label-upper" id="labelRate" style="font-size: 9px; margin-bottom: 4px;">RATE</div>
+                        <div class="input-wrapper">
+                            <input type="number" id="inputRate" placeholder="0">
+                            <span class="input-badge">IDR</span>
                         </div>
                     </div>
 
-                    <!-- INPUT HARGA PC -->
-                    <div class="space-y-1">
-                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">HARGA PC</label>
-                        <div class="relative flex items-center">
-                            <input type="number" x-model.number="inputHargaPc" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none" placeholder="0">
-                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" x-text="mataUang"></span>
+                    <!-- HARGA PC -->
+                    <div class="form-group">
+                        <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">HARGA PC</div>
+                        <div class="input-wrapper">
+                            <input type="number" id="inputHargaPc" placeholder="0">
+                            <span class="input-badge valas-badge">VALAS</span>
                         </div>
                     </div>
 
-                    <!-- INPUT SHIPLOC -->
-                    <div class="space-y-1">
-                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">SHIPLOC</label>
-                        <div class="relative flex items-center">
-                            <input type="number" x-model.number="inputShiploc" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none" placeholder="0">
-                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" x-text="mataUang"></span>
+                    <!-- SHIPLOC -->
+                    <div class="form-group">
+                        <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">SHIPLOC</div>
+                        <div class="input-wrapper">
+                            <input type="number" id="inputShiploc" placeholder="0">
+                            <span class="input-badge valas-badge">VALAS</span>
                         </div>
                     </div>
 
-                    <!-- INPUT JUMLAH BUYER -->
-                    <div class="space-y-1">
-                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">JUMLAH BUYER</label>
-                        <div class="relative flex items-center">
-                            <input type="number" x-model.number="inputBuyer" min="1" class="w-full bg-[#FCF8F2] border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none">
-                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded">PAX</span>
+                    <!-- JUMLAH BUYER -->
+                    <div class="form-group">
+                        <div class="label-upper" style="font-size: 9px; margin-bottom: 4px;">JUMLAH BUYER</div>
+                        <div class="input-wrapper">
+                            <input type="number" id="inputBuyer" min="1" value="1" style="background-color: #FCF8F2;">
+                            <span class="input-badge">PAX</span>
                         </div>
                     </div>
 
-                    <!-- TOMBOL HITUNG -->
-                    <button @click="prosesHitung()" 
-                        class="w-full bg-[#E11D48] text-white font-heading font-extrabold text-sm py-4 rounded-2xl border-2 border-black brutal-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all flex items-center justify-center gap-2 mt-4 uppercase tracking-wider">
-                        📋 HITUNG HARGA BERSIH
-                    </button>
+                    <button onclick="prosesHitung()" class="btn-hitung">📋 HITUNG HARGA BERSIH</button>
                 </div>
             </div>
 
             <!-- KOTAK HASIL PERHITUNGAN -->
-            <div x-show="sudahHitung && negaraTerpilih" x-collapse class="bg-[#581C87] border-t-2 border-black p-6 text-white">
-                <div class="border-t border-dashed border-purple-400/40 pt-1 mb-2">
-                    <span class="text-[9px] font-black uppercase tracking-widest text-purple-200" x-text="'HARGA BERSIH • ' + namaNegara"></span>
-                </div>
-                <div class="font-heading text-4xl font-black tracking-tight" x-text="formatRupiah(hasilAkhir)"></div>
+            <div id="hasilBox" class="hasil-box">
+                <div class="hasil-label" id="hasilLabelNegara">HARGA BERSIH</div>
+                <div class="hasil-nilai" id="textHasil">Rp 0</div>
             </div>
-            
         </div>
     </div>
 
-    <!-- DATA BASE DAN LOGIKA (BAGIAN UTAMA JIKA INGIN DIEDIT) -->
     <script>
-        function kalkulatorImpor() {
-            return {
-                // Variabel form internal
-                negaraTerpilih: '',
-                namaNegara: '',
-                mataUang: '',
-                inputRate: 0,
-                inputHargaPc: '',
-                inputShiploc: '',
-                inputBuyer: 1,
-                sudahHitung: false,
-                hasilAkhir: 0,
+        // Data Master Negara (Hanya menyimpan Nama, Mata Uang, dan Fee Transfer Otomatis)
+        const daftarNegara = {
+            'KR': { nama: 'Korea Selatan', mataUang: 'KRW', feeTf: 11000 },
+            'JP': { nama: 'Jepang',        mataUang: 'JPY', feeTf: 12000 },
+            'TH': { nama: 'Thailand',      mataUang: 'THB', feeTf: 10000 },
+            'PH': { nama: 'Filipina',      mataUang: 'PHP', feeTf: 8000 }
+        };
 
-                // ==========================================
-                // 1. DATA MASTER NEGARA & FEE (Ubah Di Sini)
-                // ==========================================
-                daftarNegara: [
-                    { id: 'KR', nama: 'Korea Selatan', mataUang: 'KRW', rateDefault: 12.5, feeTf: 3000, segera: false },
-                    { id: 'JP', nama: 'Jepang',        mataUang: 'JPY', rateDefault: 110,  feeTf: 5000, segera: false },
-                    { id: 'TH', nama: 'Thailand',      mataUang: 'THB', rateDefault: 450,  feeTf: 4000, segera: false },
-                    { id: 'PH', nama: 'Filipina',      mataUang: 'PHP', rateDefault: 280,  feeTf: 2500, segera: false },
-                    { id: 'US', nama: 'Amerika Serikat',mataUang: 'USD', rateDefault: 15500, feeTf: 0,    segera: true },
-                    { id: 'CN', nama: 'China',          mataUang: 'RMB', rateDefault: 2250,  feeTf: 0,    segera: true }
-                ],
-                
-                // Variabel pembantu menyimpan nilai fee tf aktif
-                feeTfAktif: 0,
+        function gantiNegara(){
+            const code = document.getElementByld('selectNegara').value;
+            const container = document.getElementByld('detailContainer');
+            const hasilBox = document.getElementByld('hasilBox');
 
-                gantiNegara() {
+            hasilBox.classList.remove('show');
+
+            if (!code || !daftarNegara[code]){
+                container.classList.remove('show');
+            }
+
+            const data = daftarNegara[code];
+
+            //Set label teks mata uang samping input
+            document.getElementByld('labelRate').innerText = RATE (${data.mataUang} ➔ IDR);
+            const badges = document.getElementsByClassName('valas-badge');
+            for(let b of badges){
+                b.innerText = data.mataUang;
+            }
+
+            //Reset input form agar kosong & wajib diisi manual
+            document.getElementByld('inputRate').value=";
+            document.getElementByld('inputHargaPc').value=";
+            document.getElementByld('inputShiploc').value=";
+            document.getElementByld('inputBuyer').value=";
+
+            container.classList.add('show');
+        }
+
+        function prosesHitung(){
+        const code = document.getElementByls('selectNegara').value;
+        if(!code || !daftarNegara[code]) return;
+
+        const data = daftarNegara[code];
+
+        //Mengambil nilai rate yang diketik manual
+        const rate = Number(document.getElementByld('inputRate').value) || 0;
+        let pc = Number(document.getElementByld('inputHargaPc').value) || 0;
+        let shiploc = Number(document.getElementByld('inputShiploc').value) || 0;
+        let buyer = Number(document.getElementByld('inputBuyer').value) || 1;
+        if(buyer<1) buyer = 1;
+
+        const feeGo = 5000;
+        const feeTfBank = data.feeTf; //Otomatis terhiutng sesuai database tiap negara
+        
+       //Aturan khusus Korea dikasi 10k dulu
+        if (code==='KR'){
+        pc = pc*10000;
+        shiploc = shiploc*10000;    
+        }
+
+        //Rumus: ((harga x rate) + fee go 5k) + (((shiploc x rate) + fee tf) : jumlah buyer)
+        const sisiKiri = (pc * rate) + feeGo;
+        const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
+        const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
+
+        // Tampilkan Hasil Ke Layar Terbawah
+        document.getElementById('hasilLabelNegara').innerText = HARGA BERSIH •
+        ${data.nama.toUpperCase()};
+        document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+        document.getElementById('hasilBox').classList.add('show');
+        }
+
+        function resetForm(){
+        document.getElementById('selectNegara').value = '';
+        document.getElementById('detailContainer').classList.remove('show');
+        document.getElementById('hasilBox').classList.remove('show');
+        }
