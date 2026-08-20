@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Impor PC K-Pop</title>
+    <!-- Tailwind CSS & Alpine.js -->
+    <script src="https://tailwindcss.com"></script>
+    <script src="https://jsdelivr.net" defer></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Efek bayangan Neo-Brutalism kaku */
+        .brutal-shadow { box-shadow: 5px 5px 0px 0px #000000; }
+        .brutal-shadow-sm { box-shadow: 2px 2px 0px 0px #000000; }
+        /* Menghilangkan panah input default number */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-[#F4EFEA] text-[#1E1E1E] min-h-screen flex flex-col items-center justify-start pt-10 px-4 pb-20">
+
+    <div x-data="kalkulatorImpor()" class="w-full max-w-[460px]">
+        
+        <!-- HEADER UTAMA -->
+        <header class="mb-6">
+            <h1 class="font-heading text-4xl font-extrabold tracking-tight leading-none uppercase">
+                KALKULATOR<br>
+                <span class="relative inline-block mt-1">
+                    IMPOR.
+                    <span class="absolute left-0 bottom-1 w-full h-[14px] bg-[#A5F3FC] -z-10 rounded-sm"></span>
+                </span>
+            </h1>
+            
+            <div class="mt-4 flex items-center gap-1.5 text-sm font-semibold">
+                <span class="text-gray-500 font-normal">by</span>
+                <span class="bg-[#E11D48] text-white px-2 py-0.5 rounded-md border border-black text-xs font-bold tracking-wide shadow-[1px_1px_0px_0px_#000]">YapGO!</span>
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-4 leading-relaxed max-w-[340px]">
+                Pilih negara, isi detail, dan dapatkan estimasi harga bersih PC dari negara asalnya.
+            </p>
+        </header>
+
+        <!-- FORM UTAMA -->
+        <div class="bg-white border-2 border-black rounded-[24px] brutal-shadow overflow-hidden transition-all duration-300">
+            
+            <div class="p-6 space-y-5">
+                <!-- BARIS PILIH NEGARA & RESET -->
+                <div class="flex justify-between items-center">
+                    <label class="block text-[10px] font-extrabold tracking-wider uppercase text-gray-500">PILIH NEGARA</label>
+                    <button @click="resetForm()" class="text-[10px] font-bold tracking-wider uppercase text-gray-600 hover:text-black flex items-center gap-1 focus:outline-none">
+                        🔄 RESET
+                    </button>
+                </div>
+
+                <!-- Dropdown Select -->
+                <div class="relative">
+                    <select x-model="negaraTerpilih" @change="gantiNegara()"
+                        class="w-full bg-[#FCF8F2] border-2 border-black rounded-xl p-3.5 pr-10 font-medium text-sm appearance-none focus:outline-none focus:ring-0 cursor-pointer">
+                        <option value="">— Pilih negara —</option>
+                        <template x-for="n in daftarNegara">
+                            <option :value="n.id" :disabled="n.segera" x-text="n.nama + (n.segera ? ' (segera)' : '')"></option>
+                        </template>
+                    </select>
+                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                    </div>
+                </div>
+
+                <!-- MENU DETAIL HARGA -->
+                <div x-show="negaraTerpilih" x-collapse x-transition:enter.duration.400ms class="space-y-4 pt-2 border-t-2 border-dashed border-gray-300">
+                    
+                    <span class="block text-[10px] font-extrabold tracking-wider uppercase text-gray-400">DETAIL HARGA</span>
+
+                    <!-- INPUT RATE -->
+                    <div class="space-y-1">
+                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500" x-text="'RATE (' + mataUang + ' ➔ IDR)'"></label>
+                        <div class="relative flex items-center">
+                            <input type="number" x-model.number="inputRate" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none">
+                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded">IDR</span>
+                        </div>
+                    </div>
+
+                    <!-- INPUT HARGA PC -->
+                    <div class="space-y-1">
+                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">HARGA PC</label>
+                        <div class="relative flex items-center">
+                            <input type="number" x-model.number="inputHargaPc" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none" placeholder="0">
+                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" x-text="mataUang"></span>
+                        </div>
+                    </div>
+
+                    <!-- INPUT SHIPLOC -->
+                    <div class="space-y-1">
+                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">SHIPLOC</label>
+                        <div class="relative flex items-center">
+                            <input type="number" x-model.number="inputShiploc" class="w-full bg-white border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none" placeholder="0">
+                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" x-text="mataUang"></span>
+                        </div>
+                    </div>
+
+                    <!-- INPUT JUMLAH BUYER -->
+                    <div class="space-y-1">
+                        <label class="block text-[9px] font-bold tracking-wider uppercase text-gray-500">JUMLAH BUYER</label>
+                        <div class="relative flex items-center">
+                            <input type="number" x-model.number="inputBuyer" min="1" class="w-full bg-[#FCF8F2] border-2 border-black rounded-xl p-3 font-semibold text-sm focus:outline-none">
+                            <span class="absolute right-3 bg-black text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded">PAX</span>
+                        </div>
+                    </div>
+
+                    <!-- TOMBOL HITUNG -->
+                    <button @click="prosesHitung()" 
+                        class="w-full bg-[#E11D48] text-white font-heading font-extrabold text-sm py-4 rounded-2xl border-2 border-black brutal-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all flex items-center justify-center gap-2 mt-4 uppercase tracking-wider">
+                        📋 HITUNG HARGA BERSIH
+                    </button>
+                </div>
+            </div>
+
+            <!-- KOTAK HASIL PERHITUNGAN -->
+            <div x-show="sudahHitung && negaraTerpilih" x-collapse class="bg-[#581C87] border-t-2 border-black p-6 text-white">
+                <div class="border-t border-dashed border-purple-400/40 pt-1 mb-2">
+                    <span class="text-[9px] font-black uppercase tracking-widest text-purple-200" x-text="'HARGA BERSIH • ' + namaNegara"></span>
+                </div>
+                <div class="font-heading text-4xl font-black tracking-tight" x-text="formatRupiah(hasilAkhir)"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- DATA BASE DAN LOGIKA (BAGIAN UTAMA JIKA INGIN DIEDIT) -->
+    <script>
+        function kalkulatorImpor() {
+            return {
+                // Variabel form internal
+                negaraTerpilih: '',
+                namaNegara: '',
+                mataUang: '',
+                inputRate: 0,
+                inputHargaPc: '',
+                inputShiploc: '',
+                inputBuyer: 1,
+                sudahHitung: false,
+                hasilAkhir: 0,
+
+                // ==========================================
+                // 1. DATA MASTER NEGARA & FEE (Ubah Di Sini)
+                // ==========================================
+                daftarNegara: [
+                    { id: 'KR', nama: 'Korea Selatan', mataUang: 'KRW', rateDefault: 12.5, feeTf: 3000, segera: false },
+                    { id: 'JP', nama: 'Jepang',        mataUang: 'JPY', rateDefault: 110,  feeTf: 5000, segera: false },
+                    { id: 'TH', nama: 'Thailand',      mataUang: 'THB', rateDefault: 450,  feeTf: 4000, segera: false },
+                    { id: 'PH', nama: 'Filipina',      mataUang: 'PHP', rateDefault: 280,  feeTf: 2500, segera: false },
+                    { id: 'US', nama: 'Amerika Serikat',mataUang: 'USD', rateDefault: 15500, feeTf: 0,    segera: true },
+                    { id: 'CN', nama: 'China',          mataUang: 'RMB', rateDefault: 2250,  feeTf: 0,    segera: true }
+                ],
+                
+                // Variabel pembantu menyimpan nilai fee tf aktif
+                feeTfAktif: 0,
+
+                gantiNegara() {
