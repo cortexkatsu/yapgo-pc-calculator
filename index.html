@@ -236,6 +236,7 @@
                         <option value="PH">Filipina</option>
                         <option value="JP">Jepang</option>
                         <option value="KR">Korea</option>
+                        <option value="TW">Taiwan</option>
                         <option value="TH">Thailand</option>
                     </select>
                 </div>
@@ -284,8 +285,9 @@
         const daftarNegara = {
             'CN': { nama: 'China', mataUang: 'RMB', feeTf: 6000 },
             'PH': { nama: 'Filipina', mataUang: 'PHP', feeTf: 10000 },
-            'JP': { nama: 'Jepang', mataUang: 'JPY', feeTf: 10000 },
+            'JP': { nama: 'Jepang', mataUang: 'JPY', feeTf: 11000 },
             'KR': { nama: 'Korea', mataUang: 'KRW', feeTf: 15000 },
+            'TW': { nama: 'Taiwan', mataUang: 'TWD', feeTf: 49500 },
             'TH': { nama: 'Thailand', mataUang: 'THB', feeTf: 9000 }
         };
 
@@ -330,7 +332,7 @@
             let buyer = Number(document.getElementById('inputBuyer').value) || 1;
             if(buyer < 1) buyer = 1;
 
-            const feeGo = 4000;
+            const feeGo = 5000;
             const feeTfBank = data.feeTf;
 
             if (code === 'KR') {
