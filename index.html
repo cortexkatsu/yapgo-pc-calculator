@@ -233,7 +233,6 @@
                     <select id="selectNegara" onchange="gantiNegara()">
                         <option value="">— Pilih negara —</option>
                         <option value="CN">China</option>
-                        <option value="PH">Filipina</option>
                         <option value="JP">Jepang</option>
                         <option value="KR">Korea</option>
                         <option value="TW">Taiwan</option>
@@ -284,7 +283,6 @@
         <script>
         const daftarNegara = {
             'CN': { nama: 'China', mataUang: 'RMB', feeTf: 11000 },
-            'PH': { nama: 'Filipina', mataUang: 'PHP', feeTf: 10000 },
             'JP': { nama: 'Jepang', mataUang: 'JPY', feeTf: 15000 },
             'KR': { nama: 'Korea', mataUang: 'KRW', feeTf: 17000 },
             'TW': { nama: 'Taiwan', mataUang: 'TWD', feeTf: 41000 },
@@ -345,7 +343,7 @@
             const sisiKanan = ((shiploc * rate) + feeTfBank) / buyer;
             const totalAkhir = Math.ceil(sisiKiri + sisiKanan);
 
-            document.getElementById('hasilLabelNegara').innerText = 'HARGA BERSIH ' + data.nama.toUpperCase();
+            document.getElementById('hasilLabelNegara').innerText = 'HARGA BERSIH INA (EXC. TAX 5-7K)';
             document.getElementById('textHasil').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
             
             // Menampilkan kotak hasil secara instan ke layar bawah tanpa macet
